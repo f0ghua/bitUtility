@@ -28,14 +28,17 @@ void MainWindow::on_pbHex_clicked()
 
     int maxBits = (sizeof(hexVal)*8);
 
-    output += QStringLiteral("Enabled Bits(0x%x):");
+    output += QString("Enabled Bits(0x%1):").arg(QString::number(hexVal, 16).toUpper());
     for(int bit = maxBits-1; bit >= 0; --bit)
     {
         if(hexVal & (1LL << bit))
             output += QString(" %1").arg(bit);
     }
+    output += "\n";
 
-    ui->pteOutput->document()->setPlainText(output);
+    //ui->pteOutput->document()->setPlainText(output);
+    ui->pteOutput->moveCursor(QTextCursor::Start);
+    ui->pteOutput->insertPlainText(output);
 }
 
 void MainWindow::on_pbBits_clicked()
@@ -46,10 +49,13 @@ void MainWindow::on_pbBits_clicked()
     QByteArray ba = input.toLatin1();
 
     for (int i = 0; i < ba.size(); ++i) {
-        qDebug() << QObject::tr("ba[%1] = %2").arg(i).arg(ba.at(i));
+        //qDebug() << QObject::tr("ba[%1] = %2").arg(i).arg(ba.at(i));
         hexVal |= (1LL << (ba.at(i) - '0'));
     }
-    output = "0x";
+    output = QString("Bits[%1] = 0x").arg(input);
     output += QString::number(hexVal, 16).toUpper();
-    ui->pteOutput->document()->setPlainText(output);
+    output += "\n";
+
+    ui->pteOutput->moveCursor(QTextCursor::Start);
+    ui->pteOutput->insertPlainText(output);
 }
